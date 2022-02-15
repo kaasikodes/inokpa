@@ -24,7 +24,7 @@ class CoursesController extends Controller
             'except'=>['index','search','searchResults','show']
             ]
         );
-        //$this->middleware('test'); //testing middleware
+        // $this->middleware('test'); //testing middleware
     }
 
 
@@ -105,7 +105,7 @@ class CoursesController extends Controller
         //add profile image if available
         //dd( $this->validateFileRequest($request));
         if ($data = $this->validateFileRequest($request)) {
-            $course->update([
+             $course->update([
                 'image'=>$data['image']->store('course_images','public'),
                 'mini_image'=>$data['image']->store('mini_images','public')
             ]);
@@ -139,6 +139,9 @@ class CoursesController extends Controller
      */
     public function edit(Course $course)
     {
+        if(auth()->user()->id !== $course->user_id){ 
+            return redirect('/courses')->with('success',"not allowed");
+        };
         return view('courses.edit', compact('course'));
     }
 
@@ -151,6 +154,7 @@ class CoursesController extends Controller
      */
     public function update(Request $request,Course $course)
     {
+        
         $data = $this->validateRequest($request);
         
         $course->update($data);

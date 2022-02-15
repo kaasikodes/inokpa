@@ -16,7 +16,8 @@ class TestMiddleware
      */
     public function handle($request, Closure $next)
     {
-        event(new UserLoggedInEvent(auth()->user()));
+        // event(new UserLoggedInEvent(auth()->user()));
+        dd(auth()->user()->id);
         return $next($request);
     }
 }
